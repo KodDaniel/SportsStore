@@ -12,14 +12,20 @@ namespace SportsStore.Controllers
         // Privat fält
         private IProductRepository _repository;
 
+        //Publikt fält
+        public int PageSize = 4;
+
         // Konstruktor
         public ProductController(IProductRepository repo)
         {
             _repository = repo;
         }
 
-        public ViewResult List() => View(_repository.Products);
-
+        // Sortera efter stigande ordning på ProductID
+        public ViewResult List(int productPage = 1) =>
+            View(_repository.Products.OrderBy(p => p.ProductId)
+                .Skip((productPage - 1) * PageSize)
+                .Take(PageSize));
 
     }
 }
