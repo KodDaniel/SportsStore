@@ -42,6 +42,7 @@ namespace SportsStore
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Product}/{action=List}/{id?}");
+
             });
 
             // Notera att detta är ett anrop till den statiska

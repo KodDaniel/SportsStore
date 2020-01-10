@@ -10,6 +10,7 @@ namespace SportsStore.Controllers
     public class ProductController : Controller
     {
         // Privat fält
+        // Notera att detta fält är beroende av AddTransiet i startup.cs
         private IProductRepository _repository;
 
         //Publikt fält
@@ -26,6 +27,13 @@ namespace SportsStore.Controllers
             View(_repository.Products.OrderBy(p => p.ProductId)
                 .Skip((productPage - 1) * PageSize)
                 .Take(PageSize));
+
+
+        //// Vi använder String Interpolation
+        //public ContentResult DisplayUrlValue(int id) => 
+        //    Content($"The id in the Url is: {id}");
+
+
 
     }
 }
