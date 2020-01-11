@@ -47,7 +47,7 @@ namespace SportsStore.Infrastructure
                 {
                     tag.AddCssClass(PageClass);
                     
-                    //Ternary Operator: Om i är lika med PageModel.CurrentZZ
+                    //Ternary Operator: Om i är lika med PageModel.Current
                     tag.AddCssClass(i == PageModel.CurrentPage ? PageClassSelected : PageClassNormal);
                 }
                 tag.InnerHtml.Append(i.ToString());
