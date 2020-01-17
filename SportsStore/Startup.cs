@@ -27,8 +27,11 @@ namespace SportsStore
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration["Data:SportStoreProducts:ConnectionString"]));
+           
             services.AddTransient<IProductRepository, EfProductRepository>();
             services.AddMvc();
+            services.AddMemoryCache();
+            services.AddSession();
         }
 
 
@@ -36,8 +39,9 @@ namespace SportsStore
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseDeveloperExceptionPage();
-            //app.UseStatusCodePages();
+            app.UseStatusCodePages();
             app.UseStaticFiles();
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -61,9 +65,9 @@ namespace SportsStore
                 routes.MapRoute(
                     name: null,
                     template: "",
-                    defaults: new {controller = "Product", action = "List", productPage = 1});
-                
-                routes.MapRoute(name: null, 
+                    defaults: new { controller = "Product", action = "List", productPage = 1 });
+
+                routes.MapRoute(name: null,
                     template: "{controller}/{action}/{id?}");
             });
 

@@ -15,6 +15,7 @@ namespace SportsStore.Controllers
         private IProductRepository _repository;
 
         //Publikt fält
+        //Bestämmer hur många produkter vi vill ha på varje sida
         public int PageSize = 4;
 
         // Konstruktor
@@ -23,29 +24,29 @@ namespace SportsStore.Controllers
             _repository = repo;
         }
 
-        public ViewResult List(string category, int productPage = 1) =>
-            View(
-            new ProductsListViewModel
+        public ViewResult List(string category, int productPage = 1)
+        {
+            var pl = new ProductsListViewModel
             {
-                Products = _repository.Products.
-                    Where(p=> category == null || p.Category == category).
-                    OrderBy(p => p.ProductId).
-                    Skip((productPage - 1) * PageSize)
-                    .Take(PageSize), 
-               
+                Products = _repository.Products.Where(p => category == null || p.Category == category)
+                    .OrderBy(p => p.ProductId).Skip((productPage - 1) * PageSize)
+                    .Take(PageSize),
+
                 PagingInfo = new PagingInfo
                 {
                     CurrentPage = productPage,
                     ItemsPerPage = PageSize,
-                    TotalItems = _repository.Products.Count()
+                    TotalItems = (category == null) ? _repository.Products.Count() : _repository.Products.Count(p=>p.Category == category)
+                   
+                    //TotalItems = _repository.Products.Count()
                 },
+
                 CurrentCategory = category
-                
-            }
+
+            };
             
-    );
-
-
+            return View(pl);
+        }
 
 
     }
