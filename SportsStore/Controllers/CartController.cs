@@ -5,26 +5,35 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SportsStore.Infrastructure;
 using SportsStore.Models;
+using SportsStore.Models.ViewModels;
 
 namespace SportsStore.Controllers
 {
     public class CartController : Controller
-    {
-
+    { 
         private IProductRepository _repository;
 
         // Konstruktor
         public CartController(IProductRepository repo) => _repository = repo;
 
+        public ViewResult Index(string returnUrl)
+        {
+            return View(new CartIndexViewModel
+            {
+                Cart = GetCart(),
+                ReturnUrl = returnUrl
+            });
+        }
 
         public RedirectToActionResult AddToCart(int productId, string returnUrl)
         {
             var product = _repository.Products.FirstOrDefault(p => p.ProductId == productId);
 
-            if (product != null)
+            if (product!= null)
             {
                 var cart = GetCart();
-                cart.RemoveLine(product);
+                // Lägger till denna produkt, 1 till antalet (argument två nedan)
+                cart.AddItem(product,1);
                 SaveCart(cart);
 
             }
@@ -36,7 +45,7 @@ namespace SportsStore.Controllers
         {
             var product = _repository.Products.FirstOrDefault(p => p.ProductId == productId);
 
-            if (product != null)
+            if (product!= null)
             {
                 var cart = GetCart();
                 cart.RemoveLine(product);
