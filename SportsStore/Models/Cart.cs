@@ -21,8 +21,9 @@ namespace SportsStore.Models
         {
             //Returns the first element of the sequence that satisfies a condition or
             //a default value if no such element is found.
-            CartLine line = lineCollection.FirstOrDefault(p => p.Product.ProductId == product.ProductId);
+            var line = lineCollection.FirstOrDefault(p => p.Product.ProductId == product.ProductId);
 
+            // Om det inte existerar en orderlinje med denna produkt, lägg till linje
             if (line == null)
             {
                 lineCollection.Add(
@@ -34,7 +35,7 @@ namespace SportsStore.Models
             }
             else
             {
-                // samma som line.Quantity = line.Quantity + quantity;
+                // Annars = Öka antalet på den existerande orderlinje som finns för denna produkt
                 line.Quantity += quantity;
             }
         }

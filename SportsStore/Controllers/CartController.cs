@@ -1,4 +1,4 @@
-﻿using System;
+﻿        using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,8 +32,10 @@ namespace SportsStore.Controllers
             if (product!= null)
             {
                 var cart = GetCart();
+                
                 // Lägger till denna produkt, 1 till antalet (argument två nedan)
                 cart.AddItem(product,1);
+                
                 SaveCart(cart);
 
             }
@@ -65,7 +67,8 @@ namespace SportsStore.Controllers
 
         private void SaveCart(Cart cart)
         {
-
+            // Sparar vår kundvagn i en session med nyckeln "Cart"
+            // Notera att vi gör detta genom vår extension metod "SetJson"
             HttpContext.Session.SetJson("Cart", cart);
         }
 
