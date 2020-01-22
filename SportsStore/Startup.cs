@@ -29,7 +29,10 @@ namespace SportsStore
                     Configuration["Data:SportStoreProducts:ConnectionString"]));
            
             services.AddTransient<IProductRepository, EfProductRepository>();
+            
             services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));
+           
+            
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); 
             services.AddMvc();
             services.AddMemoryCache();
