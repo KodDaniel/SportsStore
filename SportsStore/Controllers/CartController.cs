@@ -13,14 +13,20 @@ namespace SportsStore.Controllers
     { 
         private IProductRepository _repository;
 
+        private Cart cart;
+
         // Konstruktor
-        public CartController(IProductRepository repo) => _repository = repo;
+        public CartController(IProductRepository repo,Cart cartService)
+        {
+            _repository = repo;
+            cart = cartService;
+        }
 
         public ViewResult Index(string returnUrl)
         {
             return View(new CartIndexViewModel
             {
-                Cart = GetCart(),
+                Cart = cart,
                 ReturnUrl = returnUrl
             });
         }
@@ -31,13 +37,7 @@ namespace SportsStore.Controllers
 
             if (product!= null)
             {
-                var cart = GetCart();
-                
-                // Lägger till denna produkt, 1 till antalet (argument två nedan)
                 cart.AddItem(product,1);
-                
-                SaveCart(cart);
-
             }
 
             return RedirectToAction("Index", new { returnUrl });
@@ -47,30 +47,14 @@ namespace SportsStore.Controllers
         {
             var product = _repository.Products.FirstOrDefault(p => p.ProductId == productId);
 
-            if (product!= null)
+            if (product!=null)
             {
-                var cart = GetCart();
                 cart.RemoveLine(product);
-                SaveCart(cart);
-
             }
 
             return RedirectToAction("Index", new { returnUrl });
         }
 
-        private Cart GetCart()
-        {
-            var cart = HttpContext.Session.GetJson<Cart>("Cart") ?? new Cart();
-
-            return cart;
-        }
-
-        private void SaveCart(Cart cart)
-        {
-            // Sparar vår kundvagn i en session med nyckeln "Cart"
-            // Notera att vi gör detta genom vår extension metod "SetJson"
-            HttpContext.Session.SetJson("Cart", cart);
-        }
 
 
 

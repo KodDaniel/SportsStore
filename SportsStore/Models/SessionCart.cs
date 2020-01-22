@@ -10,19 +10,17 @@ using SportsStore.Models;
 
 namespace SportsStore.Models
 {
-    public class SessionCart : Cart
+    public class SessionCart : Cart 
     {
        // Statisk metod (INTE en konstruktor!) 
         public static Cart GetCart(IServiceProvider services)
         {
             ISession session = services.GetRequiredService<IHttpContextAccessor>()?.HttpContext.Session;
-            // Vi chainar en Null Conditional Operator med en Null Coaelsing Operator
             SessionCart cart = session?.GetJson<SessionCart>("Cart") ?? new SessionCart();
             cart.Session = session;
             return cart;
         }
-
-        // Egenskap
+        
         [JsonIgnore] 
         public ISession Session { get; set; }
 
@@ -42,7 +40,7 @@ namespace SportsStore.Models
 
         public override void Clear()
         {
-            // Vi använder base-nyckelordet för att använda Clear  basklassen Cart
+            // Vi använder base-nyckelordet för att använda Clear basklassen Cart
             base.Clear();
             Session.Remove("Cart");
         }
