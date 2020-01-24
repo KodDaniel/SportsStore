@@ -18,7 +18,31 @@ namespace SportsStore.Controllers
                 cart = cartService;
             }
 
-            public ViewResult CheckOut() => View(/*new Order()*/);
+        // En vy som visar alla orders som INTE SKICKATS 
+        public ViewResult List() =>
+            View(_repository.Orders.Where(o => !o.Shipped));
+
+        [HttpPost]
+        public IActionResult MarkShipped(int orderId)
+        {
+            // Hämta den order som finns med detta orderId
+            Order order = _repository.Orders.FirstOrDefault(o => o.OrderId == orderId);
+
+            //Blir sant om det visade sig att det fanns en order med detta orderId
+            if (order != null)
+            {
+                // Då bekräftar vi att ordern är skickad
+                order.Shipped = true;
+                // Och sparar sedan den uppgiften i databasen (att ordern har status "skickad")
+                _repository.SaveOrder(order);
+            }
+            // Redirectar till vyn som visar alla orders som INTE skickats
+            return RedirectToAction(nameof(List));
+
+        }
+
+
+        public ViewResult CheckOut() => View(/*new Order()*/);
 
             [HttpPost]
             public IActionResult Checkout(Order order)
@@ -37,12 +61,9 @@ namespace SportsStore.Controllers
                     order.Lines = cart.Lines.ToList();
                     // Lägger in ordern i databasen
                     _repository.SaveOrder(order);
-                // Rensar Kundvagnen och returnerar ett meddelande...
-                // som tackar för orden
-
-                //return RedirectToAction(nameof(Completed));
-
-                return RedirectToAction("Completed");
+                    // Rensar Kundvagnen och returnerar ett meddelande...
+                    // som tackar för orden
+                return RedirectToAction(nameof(Completed));
                 }
                 else
                 {  // Hit kommer vi om valideringen smäller

@@ -40,7 +40,7 @@ namespace SportsStore.Controllers
                 cart.AddItem(product,1);
             }
 
-            return RedirectToAction("Index", new { returnUrl });
+            return RedirectToAction(nameof(Index), new { returnUrl });
         }
 
         public RedirectToActionResult RemoveFromCart(int productId, string returnUrl)
@@ -52,7 +52,7 @@ namespace SportsStore.Controllers
                 cart.RemoveLine(product);
             }
 
-            return RedirectToAction("Index", new { returnUrl });
+            return RedirectToAction(nameof(Index), new { returnUrl });
         }
 
 
