@@ -19,5 +19,6 @@ namespace SportsStore.Models
 
         // Vi typbestämmer/implementerar den generiska klassen DbSet 
         public DbSet<Product> Products { get; set; }
+        public DbSet<Order> Orders { get; set; }
     }
 }

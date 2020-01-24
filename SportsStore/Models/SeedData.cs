@@ -12,6 +12,7 @@ namespace SportsStore.Models
             ApplicationDbContext context = app.ApplicationServices.GetRequiredService<ApplicationDbContext>();
            
             // Ser till att en databas skapas om en sådan inte redan finns
+
             context.Database.Migrate();
             
             // If-satsen blir true om vi det finns några objekt
