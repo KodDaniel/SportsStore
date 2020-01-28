@@ -41,8 +41,7 @@ namespace SportsStore.Controllers
 
         }
 
-
-        public ViewResult CheckOut() => View(/*new Order()*/);
+        public ViewResult CheckOut() => View(new Order());
 
             [HttpPost]
             public IActionResult Checkout(Order order)
