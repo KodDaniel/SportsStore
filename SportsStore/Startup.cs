@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -28,18 +27,12 @@ namespace SportsStore
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration["Data:SportStoreProducts:ConnectionString"]));
-
-            services.AddDbContext<AppIdentityDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration["Data:SportStoreIdentity:ConnectionString"]));
-
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>()
-                .AddDefaultTokenProviders();
-
+           
             services.AddTransient<IProductRepository, EfProductRepository>();
             services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IOrderRepository, EfOrderRepository>();
+
             services.AddMvc();
             services.AddMemoryCache();
             services.AddSession();
@@ -50,7 +43,6 @@ namespace SportsStore
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseDeveloperExceptionPage();
-            app.UseAuthentication();
             app.UseStatusCodePages();
             app.UseStaticFiles();
             app.UseSession();
@@ -83,10 +75,9 @@ namespace SportsStore
                     template: "{controller}/{action}/{id?}");
             });
 
-           
+            // Notera att detta är ett anrop till den statiska
+            //seed-metoden EnsurePopulated som VI SJÄLVA SKAPAT
             SeedData.EnsurePopulated(app);
-            IdentitySeedData.EnsurePopulated(app);
-
 
         }
     }

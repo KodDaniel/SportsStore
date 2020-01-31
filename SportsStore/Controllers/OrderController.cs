@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SportsStore.Models;
 
@@ -20,11 +19,9 @@ namespace SportsStore.Controllers
             }
 
         // En vy som visar alla orders som INTE SKICKATS 
-        [Authorize]
         public ViewResult List() =>
             View(_repository.Orders.Where(o => !o.Shipped));
-       
-        [Authorize]
+
         [HttpPost]
         public IActionResult MarkShipped(int orderId)
         {
