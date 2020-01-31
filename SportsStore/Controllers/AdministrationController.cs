@@ -8,12 +8,12 @@ using SportsStore.Models;
 
 namespace SportsStore.Controllers
 {
-    public class AdminController : Controller
+    [Authorize]
+    public class AdministrationController : Controller
     {
         private IProductRepository _repository;
 
-        public AdminController(IProductRepository repo) => _repository = repo;
-
+        public AdministrationController(IProductRepository repo) => _repository = repo;
 
         public ViewResult Index() => View(_repository.Products);
 
@@ -50,10 +50,10 @@ namespace SportsStore.Controllers
             //Tar bort den aktuella produkten från databasen OCH...
             //lagrar det i variabeln deleteProduct
             Product deletedProduct = _repository.DeleteProduct(productId);
-            
+
             // Om deleteProduct inte är null har vi tagit bort en produkt i databasen
             if (deletedProduct != null)
-            { 
+            {
                 // Lagrar ett meddelande om en lyckad delete för användaren
                 // Genom TempData och String Interpolation
                 TempData["message"] = $"{deletedProduct.Name} was deleted";

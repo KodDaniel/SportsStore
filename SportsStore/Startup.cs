@@ -29,17 +29,20 @@ namespace SportsStore
                 options.UseSqlServer(
                     Configuration["Data:SportStoreProducts:ConnectionString"]));
 
-            //services.AddDbContext<AppIdentityDbContext>(options =>
-            //    options.UseSqlServer(
-            //        Configuration["Data:SportStoreIdentity:ConnectionString"]));
+            services.AddDbContext<AppIdentityDbContext>(options =>
+                options.UseSqlServer(
+                    Configuration["Data:SportStoreIdentity:ConnectionString"]));
 
-            //services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>()
-            //    .AddDefaultTokenProviders();
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppIdentityDbContext>()
+                .AddDefaultTokenProviders();
+
 
             services.AddTransient<IProductRepository, EfProductRepository>();
             services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IOrderRepository, EfOrderRepository>();
+
             services.AddMvc();
             services.AddMemoryCache();
             services.AddSession();
@@ -50,28 +53,28 @@ namespace SportsStore
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseDeveloperExceptionPage();
-            app.UseAuthentication();
             app.UseStatusCodePages();
             app.UseStaticFiles();
             app.UseSession();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: null,
                     template: "{category}/Page{productPage:int}",
-                    defaults: new {controller = "Product", action = "List"}
+                    defaults: new { controller = "Product", action = "List" }
                 );
 
                 routes.MapRoute(
                     name: null,
                     template: "Page{productPage:int}",
-                    defaults: new {controller = "Product", action = "List", productPage = 1}
+                    defaults: new { controller = "Product", action = "List", productPage = 1 }
                 );
 
                 routes.MapRoute(
                     name: null,
                     template: "{category}",
-                    defaults: new {controller = "Product", action = "List", productPage = 1}
+                    defaults: new { controller = "Product", action = "List", productPage = 1 }
                 );
 
                 routes.MapRoute(
@@ -79,16 +82,16 @@ namespace SportsStore
                     template: "",
                     defaults: new { controller = "Product", action = "List", productPage = 1 });
 
+
                 routes.MapRoute(name: null,
                     template: "{controller}/{action}/{id?}");
             });
 
-           
+            // Notera att detta är ett anrop till den statiska
+            //seed-metoden EnsurePopulated som VI SJÄLVA SKAPAT
             SeedData.EnsurePopulated(app);
-            //IdentitySeedData.EnsurePopulated(app);
-
+            IdentitySeedData.EnsurePopulated(app);
 
         }
     }
 }
-

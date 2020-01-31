@@ -36,15 +36,15 @@ namespace SportsStore.Controllers
                 {
                     CurrentPage = productPage,
                     ItemsPerPage = PageSize,
-                    TotalItems = (category == null) ? _repository.Products.Count() : _repository.Products.Count(p=>p.Category == category)
-                   
+                    TotalItems = (category == null) ? _repository.Products.Count() : _repository.Products.Count(p => p.Category == category)
+
                     //TotalItems = _repository.Products.Count()
                 },
 
                 CurrentCategory = category
 
             };
-            
+
             return View(pl);
         }
 

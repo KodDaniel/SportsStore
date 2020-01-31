@@ -10,13 +10,13 @@ using SportsStore.Models.ViewModels;
 namespace SportsStore.Controllers
 {
     public class CartController : Controller
-    { 
+    {
         private IProductRepository _repository;
 
         private Cart cart;
 
         // Konstruktor
-        public CartController(IProductRepository repo,Cart cartService)
+        public CartController(IProductRepository repo, Cart cartService)
         {
             _repository = repo;
             cart = cartService;
@@ -35,9 +35,9 @@ namespace SportsStore.Controllers
         {
             var product = _repository.Products.FirstOrDefault(p => p.ProductId == productId);
 
-            if (product!= null)
+            if (product != null)
             {
-                cart.AddItem(product,1);
+                cart.AddItem(product, 1);
             }
 
             return RedirectToAction(nameof(Index), new { returnUrl });
@@ -47,7 +47,7 @@ namespace SportsStore.Controllers
         {
             var product = _repository.Products.FirstOrDefault(p => p.ProductId == productId);
 
-            if (product!=null)
+            if (product != null)
             {
                 cart.RemoveLine(product);
             }
