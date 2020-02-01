@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SportsStore.Models.ViewModels;
@@ -12,6 +13,7 @@ namespace SportsStore.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+
         private UserManager<IdentityUser> userManager;
         private SignInManager<IdentityUser> signInManager;
 
@@ -41,11 +43,12 @@ namespace SportsStore.Controllers
                 {
                     await signInManager.SignOutAsync();
 
-                    if ((await signInManager.
-                        PasswordSignInAsync(user, loginModel.Password, false, false)).Succeeded)
+
+                    if ((await signInManager.PasswordSignInAsync(user, loginModel.Password, false, false)).Succeeded)
                     {
                         // Chainar Null Conditional och Null Coaelsing
-                        return Redirect(loginModel?.ReturnUrl ?? "/Admin/Index");
+                        //Redirecten är rätt, det är Authorize-attributet i Administration-Controller som inte vill samarbeta 
+                        return Redirect(loginModel?.ReturnUrl ?? "/Administration/Index");
                     }
                 }
             }

@@ -8,6 +8,7 @@ using SportsStore.Models;
 
 namespace SportsStore.Controllers
 {
+
     [Authorize]
     public class AdministrationController : Controller
     {
