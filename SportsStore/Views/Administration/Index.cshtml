@@ -1,6 +1,8 @@
 ﻿@model IEnumerable<Product>
 @{
     ViewBag.Title = "All Products";
+
+    //Notera att vi genom att explicit referera _AdminLayout overidar den layout vi specificerar i vår _ViewStart-fil 
     Layout = "_AdminLayout";
 }
 <table class="table table-striped table-bordered table-sm">
