@@ -1,3 +1,8 @@
-﻿@{
+﻿
+@* Eftersom vi har en _ViewStart-fil där vi specificerar´  en Layout nedan, så kommer den layouten gälla förutom tre scenarion:
+    1. Det finns en annan _ViewStart-fil som har företräde för en specifik view
+    2. En view har satt sin Layout-property = null
+    3. En view refererar EXPLICIT en annan layout-fil *@
+@{
     Layout = "_Layout";
 }
