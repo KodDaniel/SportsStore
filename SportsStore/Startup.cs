@@ -90,6 +90,7 @@ namespace SportsStore
             // Notera att detta är ett anrop till den statiska
             //seed-metoden EnsurePopulated som VI SJÄLVA SKAPAT
             SeedData.EnsurePopulated(app);
+
             IdentitySeedData.EnsurePopulated(app);
 
         }

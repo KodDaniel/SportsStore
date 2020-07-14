@@ -28,6 +28,9 @@ namespace SportsStore.Controllers
         {
             var pl = new ProductsListViewModel
             {
+                // Category == null betyder att användaren ej efterfrågat en SPECIFIK kategori
+                // (p=> category == null) ger därför produkter från samtliga kategorier
+                // p.Category == category innebär att en specifik kategori blivit efterfrågat, och därför visas endast produkter inom denna kategori
                 Products = _repository.Products.Where(p => category == null || p.Category == category)
                     .OrderBy(p => p.ProductId).Skip((productPage - 1) * PageSize)
                     .Take(PageSize),
