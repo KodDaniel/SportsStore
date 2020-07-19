@@ -26,7 +26,7 @@ namespace SportsStore.Controllers
 
         public ViewResult List(string category, int productPage = 1)
         {
-            var pl = new ProductsListViewModel
+             var pl = new ProductsListViewModel
             {
                 // Category == null betyder att användaren ej efterfrågat en SPECIFIK kategori
                 // (p=> category == null) ger därför produkter från samtliga kategorier
@@ -39,11 +39,14 @@ namespace SportsStore.Controllers
                 {
                     CurrentPage = productPage,
                     ItemsPerPage = PageSize,
+                    // Om ingen kategori är vald an användaren är TotalItems samma sak som alla produkter
+                    // Annars är TotalItems alla produkter inom den valda kategorin
                     TotalItems = (category == null) ? _repository.Products.Count() : _repository.Products.Count(p => p.Category == category)
 
                     //TotalItems = _repository.Products.Count()
                 },
 
+                // CurrentCategory är egenskap i ProductsListViewModel
                 CurrentCategory = category
 
             };

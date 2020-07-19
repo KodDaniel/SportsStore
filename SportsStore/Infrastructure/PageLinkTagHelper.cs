@@ -43,8 +43,10 @@ namespace SportsStore.Infrastructure
 
             for (int i = 1; i <= PageModel.TotalPages; i++)
             {
+                // Skapar följande HTML-tag:  '<a></a>
                 TagBuilder tag = new TagBuilder("a");
                 
+                // Repetera anonyma objekt
                 tag.Attributes["href"] = urlHelper.Action(PageAction, new { productPage = i });
                 
                 if (PageClassesEnabled)
