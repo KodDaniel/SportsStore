@@ -8,13 +8,12 @@ using SportsStore.Models;
 
 namespace SportsStore.Controllers
 {
-
     [Authorize]
-    public class AdministrationController : Controller
+    public class ManagementController : Controller
     {
         private IProductRepository _repository;
 
-        public AdministrationController(IProductRepository repo) => _repository = repo;
+        public ManagementController(IProductRepository repo) => _repository = repo;
 
         public ViewResult Index() => View(_repository.Products);
 
@@ -65,4 +64,3 @@ namespace SportsStore.Controllers
         }
     }
 }
-

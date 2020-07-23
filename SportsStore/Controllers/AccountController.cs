@@ -47,8 +47,8 @@ namespace SportsStore.Controllers
                     if ((await signInManager.PasswordSignInAsync(user, loginModel.Password, false, false)).Succeeded)
                     {
                         // Chainar Null Conditional och Null Coaelsing
-                        //Redirecten är rätt, det är Authorize-attributet i Administration-Controller som inte vill samarbeta 
-                        return Redirect(loginModel?.ReturnUrl ?? "/Administration/Index");
+                        //Redirecten är rätt, det är Authorize-attributet i Admin-Controller som inte vill samarbeta 
+                        return Redirect(loginModel?.ReturnUrl ?? "/Management/Index");
                     }
                 }
             }

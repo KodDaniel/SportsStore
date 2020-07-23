@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportsStore.Models;
 
-namespace SportsStore.Migrations.AppIdentityDb
+namespace SportsStore.Migrations
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    [Migration("20200201084737_Identity")]
-    partial class Identity
+    [Migration("20200723103541_ident")]
+    partial class ident
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

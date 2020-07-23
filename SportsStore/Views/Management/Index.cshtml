@@ -19,6 +19,7 @@
             <td>@item.Name</td>
             <td class="text-right">@item.Price.ToString("c")</td>
             <td class="text-center">
+               @*Notera Post istället för Gt, eftersom Delete innebär idempotency*@
                 <form asp-action="Delete" method="post">
                     <a asp-action="Edit" class="btn btn-sm btn-warning"
                        asp-route-productId="@item.ProductId">

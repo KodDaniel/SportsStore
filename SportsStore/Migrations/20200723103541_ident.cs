@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace SportsStore.Migrations.AppIdentityDb
+namespace SportsStore.Migrations
 {
-    public partial class Identity : Migration
+    public partial class ident : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
