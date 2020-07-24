@@ -17,6 +17,12 @@ namespace SportsStore.Models
         {
         }
 
+        //// Fluent API 
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+            
+        //}
+
         // Vi typbestämmer/implementerar den generiska klassen DbSet 
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
