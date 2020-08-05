@@ -29,17 +29,15 @@ namespace SportsStore
                 options.UseSqlServer(
                     Configuration["Data:SportStoreProducts:ConnectionString"]));
 
-            services.AddDbContext<AppIdentityDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration["Data:SportStoreIdentity:ConnectionString"]));
-
             services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<AppIdentityDbContext>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
 
             services.AddTransient<IProductRepository, EfProductRepository>();
-            services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));
+            // Notera att vi förenklar raden nedan för förståelse, i boken använder författaren Lambdauttryck
+            //Exakt samma slutresultat dock (obviously) 
+            services.AddScoped<Cart>(SessionCart.GetCart);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IOrderRepository, EfOrderRepository>();
 
@@ -61,6 +59,9 @@ namespace SportsStore
             
             app.UseMvc(routes =>
             {
+                // Obs: Se Routing-avsnittet för insikt i hur alla routes fungerar.
+                // Även avsnittet "Refining the URL Scheme" 
+                // Notera det konsekventa bruket av Default values, både som inline och INTE inline
                 routes.MapRoute(
                     name: null,
                     template: "{category}/Page{productPage:int}",
