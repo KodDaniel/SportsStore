@@ -10,5 +10,6 @@ namespace SportsStore.Models
 {
     public class AppUser : IdentityUser
     { 
+
     }
 }

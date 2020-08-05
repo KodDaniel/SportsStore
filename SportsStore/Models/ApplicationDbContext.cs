@@ -17,6 +17,7 @@ namespace SportsStore.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Order>().HasOne(r => r.AppUser);
         }
 
         // Vi typbestämmer/implementerar den generiska klassen DbSet 

@@ -73,6 +73,9 @@ namespace SportsStore.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 
@@ -112,6 +115,8 @@ namespace SportsStore.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -207,6 +212,8 @@ namespace SportsStore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("AppUserId");
+
                     b.Property<string>("City")
                         .IsRequired();
 
@@ -234,6 +241,8 @@ namespace SportsStore.Migrations
 
                     b.HasKey("OrderId");
 
+                    b.HasIndex("AppUserId");
+
                     b.ToTable("Orders");
                 });
 
@@ -257,6 +266,16 @@ namespace SportsStore.Migrations
                     b.HasKey("ProductId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("SportsStore.Models.AppUser", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+
+                    b.ToTable("AppUser");
+
+                    b.HasDiscriminator().HasValue("AppUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -313,6 +332,13 @@ namespace SportsStore.Migrations
                     b.HasOne("SportsStore.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId");
+                });
+
+            modelBuilder.Entity("SportsStore.Models.Order", b =>
+                {
+                    b.HasOne("SportsStore.Models.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId");
                 });
 #pragma warning restore 612, 618
         }

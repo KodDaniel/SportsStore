@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SportsStore.Migrations
 {
-    public partial class identityMerge : Migration
+    public partial class intial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -40,33 +40,12 @@ namespace SportsStore.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    Discriminator = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Orders",
-                columns: table => new
-                {
-                    OrderId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Shipped = table.Column<bool>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Line1 = table.Column<string>(nullable: false),
-                    Line2 = table.Column<string>(nullable: true),
-                    Line3 = table.Column<string>(nullable: true),
-                    City = table.Column<string>(nullable: false),
-                    State = table.Column<string>(nullable: false),
-                    Zip = table.Column<string>(nullable: true),
-                    Country = table.Column<string>(nullable: false),
-                    GiftWrap = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Orders", x => x.OrderId);
                 });
 
             migrationBuilder.CreateTable(
@@ -192,6 +171,35 @@ namespace SportsStore.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    OrderId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Shipped = table.Column<bool>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Line1 = table.Column<string>(nullable: false),
+                    Line2 = table.Column<string>(nullable: true),
+                    Line3 = table.Column<string>(nullable: true),
+                    City = table.Column<string>(nullable: false),
+                    State = table.Column<string>(nullable: false),
+                    Zip = table.Column<string>(nullable: true),
+                    Country = table.Column<string>(nullable: false),
+                    GiftWrap = table.Column<bool>(nullable: false),
+                    AppUserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.OrderId);
+                    table.ForeignKey(
+                        name: "FK_Orders_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CartLine",
                 columns: table => new
                 {
@@ -266,6 +274,11 @@ namespace SportsStore.Migrations
                 name: "IX_CartLine_ProductId",
                 table: "CartLine",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_AppUserId",
+                table: "Orders",
+                column: "AppUserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -292,13 +305,13 @@ namespace SportsStore.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }
