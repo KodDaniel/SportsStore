@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 using SportsStore.Infrastructure;
 using SportsStore.Models;
 
 namespace SportsStore.Models
 {
-    public class SessionCart : Cart 
+    public class SessionCart : Cart
     {
-       // Statisk metod (INTE en konstruktor!) 
+        // Statisk metod (INTE en konstruktor!) 
         public static Cart GetCart(IServiceProvider services)
         {
             ISession session = services.GetRequiredService<IHttpContextAccessor>()?.HttpContext.Session;
@@ -20,8 +20,8 @@ namespace SportsStore.Models
             cart.Session = session;
             return cart;
         }
-        
-        [JsonIgnore] 
+
+        [JsonIgnore]
         public ISession Session { get; set; }
 
         public override void AddItem(Product product, int quantity)

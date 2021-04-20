@@ -12,7 +12,7 @@ namespace SportsStore.Controllers
     {
         // Privat fält
         // Notera att detta fält är beroende av AddTransiet i startup.cs
-        private IProductRepository _repository;
+        private readonly IProductRepository _repository;
 
         //Publikt fält
         //Bestämmer hur många produkter vi vill ha på varje sida
@@ -26,7 +26,7 @@ namespace SportsStore.Controllers
 
         public ViewResult List(string category, int productPage = 1)
         {
-             var pl = new ProductsListViewModel
+            var pl = new ProductsListViewModel
             {
                 // Category == null betyder att användaren ej efterfrågat en SPECIFIK kategori
                 // (p=> category == null) ger därför produkter från samtliga kategorier

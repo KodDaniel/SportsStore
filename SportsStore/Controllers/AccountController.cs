@@ -48,7 +48,7 @@ namespace SportsStore.Controllers
                     {
                         // Chainar Null Conditional och Null Coaelsing
                         //Redirecten är rätt, det är Authorize-attributet i Admin-Controller som inte vill samarbeta 
-                        return Redirect(loginModel?.ReturnUrl ?? "/Management/Index");
+                        return LocalRedirect(loginModel?.ReturnUrl ?? "/Management/Index");
                     }
                 }
             }

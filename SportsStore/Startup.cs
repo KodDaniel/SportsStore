@@ -33,68 +33,59 @@ namespace SportsStore
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-
-            services.AddTransient<IProductRepository, EfProductRepository>();
-            // Notera att vi förenklar raden nedan för förståelse, i boken använder författaren Lambdauttryck
-            //Exakt samma slutresultat dock (obviously) 
-            services.AddScoped<Cart>(SessionCart.GetCart);
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddTransient<IOrderRepository, EfOrderRepository>();
-
-            services.AddMvc();
-            services.AddMemoryCache();
+            services.AddScoped<IProductRepository, EfProductRepository>();
+            services.AddScoped<IOrderRepository, EfOrderRepository>();
+            //Notera att vi förenklar raden nedan för förståelse, i boken använder författaren Lambdauttryck
+            //  Exakt samma slutresultat dock(obviously)
+            services.AddScoped(SessionCart.GetCart);
+            services.AddControllersWithViews();
+            services.AddRazorPages();
+            services.AddDistributedMemoryCache();
             services.AddSession();
+            services.AddServerSideBlazor();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
         }
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 
         {
-            app.UseAuthentication();
-            app.UseStaticFiles();
-            app.UseSession();
             app.UseDeveloperExceptionPage();
             app.UseStatusCodePages();
-            
-            app.UseMvc(routes =>
+            app.UseStaticFiles();
+            app.UseSession();
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
             {
-                // Obs: Se Routing-avsnittet för insikt i hur alla routes fungerar.
-                // Även avsnittet "Refining the URL Scheme" 
-                // Notera det konsekventa bruket av Default values, både som inline och INTE inline
-                routes.MapRoute(
-                    name: null,
-                    template: "{category}/Page{productPage:int}",
-                    defaults: new { controller = "Product", action = "List" }
-                );
+                endpoints.MapControllerRoute("catpage", "{category}/Page{productPage:int}",
+                    new {Controller = "Product", action = "List"});
 
-                routes.MapRoute(
-                    name: null,
-                    template: "Page{productPage:int}",
-                    defaults: new { controller = "Product", action = "List", productPage = 1 }
-                );
+                endpoints.MapControllerRoute("page", "Page{productPage:int}",
+                    new {Controller = "Product", action = "List", productPage = 1});
 
-                routes.MapRoute(
-                    name: null,
-                    template: "{category}",
-                    defaults: new { controller = "Product", action = "List", productPage = 1 }
-                );
+                endpoints.MapControllerRoute("category", "{category}",
+                    new {Controller = "Product", action = "List", productPage = 1});
 
-                routes.MapRoute(
-                    name: null,
-                    template: "",
-                    defaults: new { controller = "Product", action = "List", productPage = 1 });
+                endpoints.MapControllerRoute("pagination",
+                    "Products/Page{productPage}",
+                    new {Controller = "Product", action = "List", productPage = 1});
 
+                endpoints.MapControllerRoute(name: "default", 
+                    pattern: "{controller=Product}/{action=List}");
 
-                routes.MapRoute(name: null,
-                    template: "{controller}/{action}/{id?}");
+                endpoints.MapRazorPages();
+                //endpoints.MapBlazorHub();
+                //endpoints.MapFallbackToPage("/admin/{*catchall}", "/Management/Index");
             });
-
+           
+       
             // Notera att detta är ett anrop till den statiska
             //seed-metoden EnsurePopulated som VI SJÄLVA SKAPAT
             SeedData.EnsurePopulated(app);
-
-            IdentitySeedData.EnsurePopulated(app);
+            IdentitySeedData.EnsurePopulated(app).Wait();
 
         }
     }
